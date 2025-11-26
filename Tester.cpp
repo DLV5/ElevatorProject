@@ -16,10 +16,7 @@ static bool Tester::compareEqual(const Type &a, const Type &b){
 template bool Tester::compareEqual<int>(const int&, const int&);
 
 
-void Tester::doUltrasonicSensorTests(){
-   int minimalPulseValue = 233;
-   int maximumPulseValue = 2076;
-   
+void Tester::doUltrasonicSensorTests(){   
    //Include when we have sensor class
    //UltrasonicSensor sensor;
 
@@ -32,3 +29,8 @@ void Tester::doUltrasonicSensorTests(){
   //   }
 
 }
+
+// void Tester::doInputHandlerTests(){
+  
+//   uint8_t desiredValue = 
+// }

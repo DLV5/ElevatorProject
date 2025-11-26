@@ -4,8 +4,10 @@
 
 class Tester{
   private:
-    bool testUltrasonicPins();
-    bool testUltrasonicData();
+    int minimalPulseValue = 233;
+    int maximumPulseValue = 1470;
+    //bool testUltrasonicPins();
+    //bool testUltrasonicData();
 
   public:
     Tester();
