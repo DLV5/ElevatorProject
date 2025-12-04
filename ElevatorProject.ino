@@ -12,7 +12,6 @@ MotorController motorController;
 bool debounce = false;
 int debounceDelay = 50;
 
-void setup() {
   Serial.begin(9600);
   //tester.compareEqual<int>(1, 2);
   Serial << "Starting the motor" << endl;
@@ -24,6 +23,8 @@ void setup() {
   //motorController.toggleMotor();
   //Serial << "Stopping the motor" << endl;
 
+void setup() {
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -37,7 +38,6 @@ void loop() {
 
   //music.playSong();
   if(debounce) debounceDelay--;
-
   if(debounceDelay == 0) {
     debounceDelay = 50;
     debounce = false;
