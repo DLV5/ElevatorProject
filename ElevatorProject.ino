@@ -1,9 +1,11 @@
-void setup() {
-  // put your setup code here, to run once:
+#include "UltraSonicSensor.h"
+#include "Streaming.h"
+UltraSonicSensor sensor1(true);
 
+void setup() {
+  Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+    sensor1.getPulses();
 }
