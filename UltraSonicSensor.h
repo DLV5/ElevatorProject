@@ -2,7 +2,8 @@
 
 class UltraSonicSensor{
   private:
-  uint8_t echoPin = 10;
+  byte echoPin = 0b10;
+  uint8_t echoPinDigit = 10;
   bool isDebugModeActive;
   uint16_t calculatePulses();
   void displayDistanceAndPulses(uint16_t pulses);

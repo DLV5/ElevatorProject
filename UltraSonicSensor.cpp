@@ -1,13 +1,11 @@
 #include "UltraSonicSensor.h"
 #include "Streaming.h"
 uint16_t UltraSonicSensor::calculatePulses() {
-  PORTB = 0b0;
-  delayMicroseconds(2);
-  PORTB = 0b10;
+  PORTB ^= echoPin;
   delayMicroseconds(10);
-  PORTB = 0b0;
+  PORTB ^= echoPin;
 
-  uint16_t valueToReturn = pulseIn(echoPin, 1);
+  uint16_t valueToReturn = pulseIn(echoPinDigit, 1);
 
   if(isDebugModeActive) displayDistanceAndPulses(valueToReturn);
 
