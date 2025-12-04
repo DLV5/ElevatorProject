@@ -14,14 +14,14 @@ uint8_t InputHandler::calculateVoltageBasedOnUltrasonicData(uint16_t sensorData,
   switch (targetFloor) {
   case 1:
     if(currentFloor == 1) return;
-    if(currentFloor == 2) returnValueDegrees = map(sensorData, 1240, 1930, 150, 255);
-    if(currentFloor == 3) returnValueDegrees = map(sensorData, 550, 1930, 150, 255);
+    if(currentFloor == 2) returnValueDegrees = map(sensorData, 1240, 1930, 255, 0);
+    if(currentFloor == 3) returnValueDegrees = map(sensorData, 460, 1930, 255, 0);
     break;
   //Move to second floor
   case 2:
-    if(currentFloor == 1) returnValueDegrees = map(sensorData, 1930, 1240, 150, 255);
+    if(currentFloor == 1) returnValueDegrees = map(sensorData, 1930, 1240, 255, 0);
     if(currentFloor == 2) return;
-    if(currentFloor == 3) returnValueDegrees = map(sensorData, 550, 1240, 150, 255);
+    if(currentFloor == 3) returnValueDegrees = map(sensorData, 460, 1240, 150, 255);
     break;
   // move to third
   case 3:

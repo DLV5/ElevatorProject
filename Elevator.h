@@ -15,7 +15,7 @@ struct ElevatorData{
   InputHandler inputHandler;
 
   //EEROM reading should be added later
-  uint8_t currentFloor = 1;
+  uint8_t currentFloor;
   uint8_t targetFloors[3];
   uint8_t targetFloorsIndexes = 0;
   uint8_t waitTimeOnOneFlooreInMilliseconds = 2000;

@@ -2,6 +2,8 @@
 #include "UltraSonicSensor.h"
 #include "Elevator.h"
 #include "Streaming.h"
+#include <EEPROM.h>
+
 void Elevator::updateNumbersOnDisplay(){
 
 }
@@ -14,8 +16,9 @@ void Elevator::moveToTheFloor(){
     data.targetFloors[0], 
     data.currentFloor);
 
+
+  Serial << "Going to the floor: " << data.targetFloors[0] << endl;
   data.motor.toggleMotor();
-  Serial << data.motor.getDirection() << endl;
   if(data.currentFloor > data.targetFloors[0] && (data.motor.getDirection() == UP)){
     data.motor.changeDirection();
     data.motor.setRotationSpeed(voltage);
@@ -42,6 +45,10 @@ void Elevator::setTargetFloor(int floorNumber){
   data.targetFloors[data.targetFloorsIndexes] = floorNumber;
   ++data.targetFloorsIndexes;
 
+  Serial << data.targetFloors[0] << "Target floor 0" << endl;
+  Serial << data.targetFloors[1] << "Target floor 1" <<endl;
+  Serial << data.targetFloors[2] << "Target floor 2" <<endl;
+
   moveToTheFloor();
 }
 
@@ -53,18 +60,23 @@ void Elevator::checkIfTheFloorReached(){
 
   // Serial << voltage << " voltage" << endl;
   // Serial << data.sensor.getPulses() << " pulses" << endl;
-
-  if(data.isMoving && voltage < 10){
+  //Serial << voltage << endl;
+  if(data.isMoving && voltage < 45){
     stop();
     data.currentFloor = data.targetFloors[0];
+
+    EEPROM.write(0, data.currentFloor == 0 ? 1 : data.currentFloor);
+
     --data.targetFloorsIndexes;
 
     data.targetFloors[0] = data.targetFloors[1];
     data.targetFloors[1] = data.targetFloors[2];
     data.targetFloors[2] = 0;
 
-    Serial << data.targetFloorsIndexes << "Floor index" << endl;
-    Serial << data.currentFloor << "current floor" << endl;
+    if(data.targetFloors[0] != 0)
+      moveToTheFloor();
+    //Serial << data.targetFloorsIndexes << " Floor index" << endl;
+    //Serial << data.currentFloor << " current floor" << endl;
 
   }
 }

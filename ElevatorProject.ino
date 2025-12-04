@@ -5,13 +5,13 @@
 #include "UltraSonicSensor.h"
 #include "Music.h"
 #include "Elevator.h"
+#include <EEPROM.h>
 
 MotorController motor;
-UltraSonicSensor sensor(true);
+UltraSonicSensor sensor;
 Music music;
 Tester tester;
 InputHandler inputHandler;
-
 
 Elevator elevator;
 ElevatorData data;
@@ -27,10 +27,18 @@ void setup() {
   data.music = music;
   data.inputHandler = inputHandler;
 
-  //tester.compareEqual<int>(1, 2);
-  Serial << "Elevator move to floor 2" << endl;
-  //motor.changeDirection();
-  elevator.setTargetFloor(2);
+  data.currentFloor = EEPROM.read(0);
+
+  data.targetFloors[1] = 1;
+  data.targetFloors[2] = 2;
+
+
+  Serial << "Current floor is: " << data.currentFloor << endl;
+
+  elevator.data = data;
+
+  elevator.setTargetFloor(3);
+
 }
 
 void loop() {
@@ -50,11 +58,6 @@ void loop() {
   // }
 
   if(millis() % 100 == 0) {
-    // if(!debounce){
-    //   Serial << "turning off" << endl;
-    //   motorController.toggleMotor();
-    //   debounce = true;
-    // }
     elevator.checkIfTheFloorReached();
   }
 }
