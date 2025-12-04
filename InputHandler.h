@@ -12,5 +12,5 @@ class InputHandler{
     uint8_t* getPins();
 
     //void move(Elevator, _valueBehindTheButton);
-    uint8_t calculateVoltageBasedOnUltrasonicData(uint16_t data);
+    uint8_t calculateVoltageBasedOnUltrasonicData(uint16_t sensorData, uint8_t targetFloor, uint8_t currentFloor);
 };

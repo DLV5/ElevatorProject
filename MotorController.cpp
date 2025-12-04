@@ -1,5 +1,7 @@
+#include "HardwareSerial.h"
 #include "Arduino.h"
 #include "MotorController.h"
+#include "Streaming.h"
 
 MotorController::MotorController(){
   pinMode(_pins[0], OUTPUT);
@@ -22,6 +24,17 @@ void MotorController::toggleMotor(){
 void MotorController::changeDirection(){
   digitalWrite(_pins[1], !digitalRead(_pins[1]));
   digitalWrite(_pins[2], !digitalRead(_pins[2]));
+
+  Serial << direction << endl;
+
+  if(digitalRead(_pins[2]) == HIGH){
+    Serial << "Change direction to up" << endl;
+    direction = UP;
+  }
+  else{
+    Serial << "Change direction to down" << endl;
+    direction = DOWN;
+  }
 }
 
 void MotorController::setRotationSpeed(uint8_t voltage){
@@ -32,4 +45,8 @@ void MotorController::setRotationSpeed(uint8_t voltage){
     digitalWrite(_pins[1], LOW);
     analogWrite(_pins[2], voltage);
   }
+}
+
+Direction MotorController::getDirection(){
+  return direction;
 }

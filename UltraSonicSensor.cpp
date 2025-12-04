@@ -1,5 +1,6 @@
 #include "UltraSonicSensor.h"
 #include "Streaming.h"
+
 uint16_t UltraSonicSensor::calculatePulses() {
   PORTB ^= echoPin;
   delayMicroseconds(10);
