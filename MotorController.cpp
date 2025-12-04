@@ -6,6 +6,7 @@ MotorController::MotorController(){
   pinMode(_pins[1], OUTPUT);
   pinMode(_pins[2], OUTPUT);
 
+  digitalWrite(_pins[0], LOW);
   digitalWrite(_pins[1], LOW);
   digitalWrite(_pins[2], HIGH);
 }

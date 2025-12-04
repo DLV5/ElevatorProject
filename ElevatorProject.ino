@@ -9,20 +9,37 @@ Tester tester;
 InputHandler InputHandler;
 MotorController motorController;
 
+bool debounce = false;
+int debounceDelay = 50;
+
 void setup() {
   Serial.begin(9600);
   //tester.compareEqual<int>(1, 2);
   Serial << "Starting the motor" << endl;
   motorController.toggleMotor();
-  motorController.changeDirection();
   motorController.setRotationSpeed(150);
+  //motorController.changeDirection();
   // Serial << "Changed direction" << endl;
   // delay(3000);
   //motorController.toggleMotor();
-  Serial << "Stopping the motor" << endl;
+  //Serial << "Stopping the motor" << endl;
 
 }
 
 void loop() {
+  if(millis() % 6000 == 5999) {
+    if(!debounce){
+      Serial << "turning off" << endl;
+      motorController.toggleMotor();
+      debounce = true;
+    }
+  }
+
   //music.playSong();
+  if(debounce) debounceDelay--;
+
+  if(debounceDelay == 0) {
+    debounceDelay = 50;
+    debounce = false;
+  }
 }
