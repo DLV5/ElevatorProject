@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 #include "MotorController.h"
 #include "UltraSonicSensor.h"
 #include "Elevator.h"
@@ -39,29 +40,67 @@ void Elevator::stop(){
   data.isMoving = false;
 }
 
+bool Elevator::pulsesToFloor(uint16_t pulses){
+
+  //Serial << data.currentFloor << " " << data.targetFloors[0] << " " << pulses << endl;
+
+  switch(data.currentFloor){
+    case 1:
+      if(data.targetFloors[0] == 2){
+        return pulses < 970;
+      }
+      else
+       return pulses < 460;
+
+      break;
+    case 2:
+      if(data.targetFloors[0] == 1){
+        return pulses > 1530;
+      }
+      else
+       return pulses < 460; 
+
+      break;
+    case 3:
+      if(data.targetFloors[0] == 2){
+        return pulses > 970;
+      }
+      else
+       return pulses > 1530;
+
+      break;
+  }
+}
+
 void Elevator::setTargetFloor(int floorNumber){
   if(data.targetFloorsIndexes >= 2) return;
+
+  bool isUniqueFloor = true;
+
+  if(data.currentFloor == floorNumber) return;
+
+  for(int i = 0; i < 2; i++){
+    if(data.targetFloors[i] == floorNumber){
+      isUniqueFloor = false;
+    }
+  }
+
+  if(!isUniqueFloor) return;
 
   data.targetFloors[data.targetFloorsIndexes] = floorNumber;
   ++data.targetFloorsIndexes;
 
-  Serial << data.targetFloors[0] << "Target floor 0" << endl;
-  Serial << data.targetFloors[1] << "Target floor 1" <<endl;
-  Serial << data.targetFloors[2] << "Target floor 2" <<endl;
-
-  moveToTheFloor();
+  // Serial << data.targetFloors[0] << "Target floor 0" << endl;
+  // Serial << data.targetFloors[1] << "Target floor 1" <<endl;
+  // Serial << data.targetFloors[2] << "Target floor 2" <<endl;
+  if(!data.isMoving)
+    moveToTheFloor();
 }
 
 void Elevator::checkIfTheFloorReached(){
-  uint8_t voltage = data.inputHandler.calculateVoltageBasedOnUltrasonicData(
-    data.sensor.getPulses(), 
-    data.targetFloors[0], 
-    data.currentFloor);
+  uint16_t pulses = data.sensor.getPulses();
 
-  // Serial << voltage << " voltage" << endl;
-  // Serial << data.sensor.getPulses() << " pulses" << endl;
-  //Serial << voltage << endl;
-  if(data.isMoving && voltage < 45){
+  if(data.isMoving && pulsesToFloor(pulses)){
     stop();
     data.currentFloor = data.targetFloors[0];
 
@@ -77,6 +116,5 @@ void Elevator::checkIfTheFloorReached(){
       moveToTheFloor();
     //Serial << data.targetFloorsIndexes << " Floor index" << endl;
     //Serial << data.currentFloor << " current floor" << endl;
-
   }
 }

@@ -4,11 +4,11 @@
 
 class InputHandler{
   private:
-    uint8_t _elevatorFloorButtonPins[3] {1, 2, 3};
+    uint8_t _elevatorFloorButtonPins[3] {A3, A4, A5};
     uint8_t _valueBehindTheButton[3] {1, 2, 3};
     //Elevator elevator;
   public:
-    InputHandler() : _elevatorFloorButtonPins{1, 2, 3} {}
+    InputHandler();
     uint8_t* getPins();
 
     //void move(Elevator, _valueBehindTheButton);

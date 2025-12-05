@@ -18,7 +18,8 @@ struct ElevatorData{
   uint8_t currentFloor;
   uint8_t targetFloors[3];
   uint8_t targetFloorsIndexes = 0;
-  uint8_t waitTimeOnOneFlooreInMilliseconds = 2000;
+  uint16_t waitTimeOnOneFlooreInMilliseconds = 2000;
+  uint8_t errorMargin = 50;
 
   bool isMoving = false;
 };
@@ -31,6 +32,7 @@ class Elevator {
 
   public:
   ElevatorData data;
+  bool pulsesToFloor(uint16_t pulses);
   void setTargetFloor(int floorNumber);
   void checkIfTheFloorReached();
 };
