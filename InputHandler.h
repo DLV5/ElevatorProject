@@ -4,7 +4,7 @@
 
 class InputHandler{
   private:
-    uint8_t _elevatorFloorButtonPins[3] {A3, A4, A5};
+    uint8_t _elevatorFloorButtonPins[3] {A1, A2, A3};
     uint8_t _valueBehindTheButton[3] {1, 2, 3};
     //Elevator elevator;
   public:

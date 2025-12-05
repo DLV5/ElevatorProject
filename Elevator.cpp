@@ -5,8 +5,10 @@
 #include "Streaming.h"
 #include <EEPROM.h>
 
-void Elevator::updateNumbersOnDisplay(){
-
+void Elevator::updateNumbersOnDisplay(LiquidCrystal_I2C lcd){
+  lcd.setCursor(0,0);
+  lcd.print("Curren floor: ");
+  lcd.print(data.currentFloor);
 }
 
 void Elevator::moveToTheFloor(){

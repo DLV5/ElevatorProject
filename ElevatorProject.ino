@@ -7,7 +7,9 @@
 #include "Elevator.h"
 #include <EEPROM.h>
 #include <avr/wdt.h>
+#include <LiquidCrystal_I2C.h>
 
+LiquidCrystal_I2C lcd(0x27,16,2); 
 MotorController motor;
 UltraSonicSensor sensor;
 Music music;
@@ -26,8 +28,6 @@ void setup() {
   WDTCSR |= 0b00011000;
   WDTCSR = 0b01101001;
 
-
-
   Serial.begin(9600);
 
   data.motor = motor;
@@ -39,21 +39,18 @@ void setup() {
 
   elevator.data = data;
 
-  Serial << "Current floor is: " << data.currentFloor << endl;
+  lcd.init();
 
-  //elevator.setTargetFloor(3);
-
+  elevator.updateNumbersOnDisplay(lcd);
 }
 
 void loop() {
   elevator.data.music.update();
 
-
-
   if(!debounce) {
-    if(!digitalRead(A3)) elevator.setTargetFloor(1);
-    if(!digitalRead(A4)) elevator.setTargetFloor(2);
-    if(!digitalRead(A5)) elevator.setTargetFloor(3);
+    if(!digitalRead(A1)) elevator.setTargetFloor(1);
+    if(!digitalRead(A2)) elevator.setTargetFloor(2);
+    if(!digitalRead(A3)) elevator.setTargetFloor(3);
   }
   
   if(!elevator.data.music.isMusicPlaying){
@@ -68,6 +65,7 @@ void loop() {
 
   if(millis() % 50 == 0) {
     elevator.checkIfTheFloorReached();
+    elevator.updateNumbersOnDisplay(lcd);
   }
 
   if(debounce) debounceDelay--;
