@@ -39,6 +39,6 @@ uint8_t InputHandler::calculateVoltageBasedOnUltrasonicData(uint16_t sensorData,
   }
 
   //return sin(returnValueDegrees * PI/180) * maxVoltage;
-  return 150;
+  return 200;
 }
 

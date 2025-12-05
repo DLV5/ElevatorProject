@@ -18,7 +18,8 @@ void Elevator::moveToTheFloor(){
     data.currentFloor);
 
 
-  Serial << "Going to the floor: " << data.targetFloors[0] << endl;
+  Serial << "Going to the floor: " << data.targetFloors[0] << " from the floor " << data.currentFloor << endl;
+  
   data.motor.toggleMotor();
   if(data.currentFloor > data.targetFloors[0] && (data.motor.getDirection() == UP)){
     data.motor.changeDirection();
@@ -73,7 +74,7 @@ bool Elevator::pulsesToFloor(uint16_t pulses){
 }
 
 void Elevator::setTargetFloor(int floorNumber){
-  if(data.targetFloorsIndexes >= 2) return;
+  if(data.targetFloorsIndexes > 2) return;
 
   bool isUniqueFloor = true;
 
@@ -87,14 +88,15 @@ void Elevator::setTargetFloor(int floorNumber){
 
   if(!isUniqueFloor) return;
 
+  Serial << "Succesfully added number: " << floorNumber << " to the list" << endl;
   data.targetFloors[data.targetFloorsIndexes] = floorNumber;
   ++data.targetFloorsIndexes;
 
-  // Serial << data.targetFloors[0] << "Target floor 0" << endl;
-  // Serial << data.targetFloors[1] << "Target floor 1" <<endl;
-  // Serial << data.targetFloors[2] << "Target floor 2" <<endl;
-  if(!data.isMoving)
+  //Serial << "Is moving currently " << data.isMoving << endl;
+  if(!data.isMoving){
+    data.music.stopAndReset();
     moveToTheFloor();
+  }
 }
 
 void Elevator::checkIfTheFloorReached(){
@@ -103,8 +105,8 @@ void Elevator::checkIfTheFloorReached(){
   if(data.isMoving && pulsesToFloor(pulses)){
     stop();
     data.currentFloor = data.targetFloors[0];
-
-    EEPROM.write(0, data.currentFloor == 0 ? 1 : data.currentFloor);
+    Serial << "Current floor is: " << data.currentFloor << endl;
+    EEPROM.write(0, data.currentFloor);
 
     --data.targetFloorsIndexes;
 
@@ -112,8 +114,10 @@ void Elevator::checkIfTheFloorReached(){
     data.targetFloors[1] = data.targetFloors[2];
     data.targetFloors[2] = 0;
 
-    if(data.targetFloors[0] != 0)
-      moveToTheFloor();
+    data.music.playSong();
+
+    // if(data.targetFloors[0] != 0)
+    //   moveToTheFloor();
     //Serial << data.targetFloorsIndexes << " Floor index" << endl;
     //Serial << data.currentFloor << " current floor" << endl;
   }

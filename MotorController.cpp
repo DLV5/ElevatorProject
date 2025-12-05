@@ -25,8 +25,6 @@ void MotorController::changeDirection(){
   digitalWrite(_pins[1], !digitalRead(_pins[1]));
   digitalWrite(_pins[2], !digitalRead(_pins[2]));
 
-  Serial << direction << endl;
-
   if(digitalRead(_pins[2]) == HIGH){
     Serial << "Change direction to up" << endl;
     direction = UP;

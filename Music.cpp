@@ -1,4 +1,7 @@
+#include "HardwareSerial.h"
+#include "Arduino.h"
 #include "Music.h"
+#include "Streaming.h"
 
 #define BUZZER_PIN 8
 
@@ -7,22 +10,27 @@ Music::Music(){
 }
 
 void Music::playSong(){
-  int size = sizeof(durations) / sizeof(int);
+  isMusicPlaying = true;
+}
 
-  for (int note = 0; note < size; note++) {
-    //to calculate the note duration, take one second divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-    int duration = maintime / durations[note];
-    tone(BUZZER_PIN, melody[note], duration);
+void Music::update(){
+  if(!isMusicPlaying) return;
 
-    //to distinguish the notes, set a minimum time between them.
-    //the note's duration + 30% seems to work well:
-    int pauseBetweenNotes = duration * 1.30;
-    delay(pauseBetweenNotes);
-    
-    //stop the tone playing:
-    noTone(BUZZER_PIN);
+  if(millis() >= (maintime / durations[currentNote] * 1.3) + noteStart ){
+    if(currentNote > 10) {
+        stopAndReset();
+        return;
+      }
+
+    currentNote++;
+
+    tone(BUZZER_PIN, melody[currentNote], maintime / durations[currentNote]);
+    noteStart = millis();
   }
+}
 
-  maintime -= 50;
+void Music::stopAndReset(){
+   currentNote = 0;
+   noTone(BUZZER_PIN);
+   isMusicPlaying = false;
 }
