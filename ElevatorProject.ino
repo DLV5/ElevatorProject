@@ -22,11 +22,17 @@ ElevatorData data;
 bool debounce = false;
 int debounceDelay = 50;
 
-//int stopDebounce = 0;
+int secondCounter = 0;
 
 void setup() {
   WDTCSR |= 0b00011000;
   WDTCSR = 0b01101001;
+
+  TCCR1A = 0;           // Init Timer1A
+  TCCR1B = 0;           // Init Timer1B
+  TCCR1B |= B00000100;  // Prescaler = 256
+  OCR1A = 62500;        // Timer Compare1A Register
+  TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
 
   Serial.begin(9600);
 
@@ -56,11 +62,15 @@ void loop() {
   if(!elevator.data.music.isMusicPlaying){
     if(elevator.data.targetFloors[0] != 0){
       elevator.moveToTheFloor();
+      secondCounter = 0;
     } else {
       elevator.data.music.playSong();
     }
   } else {
-    return;
+      lcd.setCursor(0, 1);
+      lcd.print("Seconds AFK: ");
+      lcd.print(secondCounter);
+      return;
   }
 
   if(millis() % 50 == 0) {
@@ -75,4 +85,15 @@ void loop() {
   }
 
   wdt_reset();
+}
+
+ISR(WDT_vect){
+  EEPROM.write(0, elevator.data.currentFloor);
+}
+
+ISR(TIMER1_COMPA_vect)
+{
+  OCR1A += 62500; // Advance The COMPA Register
+  
+  ++secondCounter;
 }
