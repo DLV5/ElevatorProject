@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Arduino.h"
-#include "Tester.h"
 #include "InputHandler.h"
 #include "Streaming.h"
 #include "MotorController.h"

@@ -1,6 +1,4 @@
-#include "Tester.h"
 #include "InputHandler.h"
-#include "Streaming.h"
 #include "MotorController.h"
 #include "UltraSonicSensor.h"
 #include "Music.h"
@@ -13,7 +11,6 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 MotorController motor;
 UltraSonicSensor sensor;
 Music music;
-Tester tester;
 InputHandler inputHandler;
 
 Elevator elevator;
@@ -33,8 +30,6 @@ void setup() {
   TCCR1B |= B00000100;  // Prescaler = 256
   OCR1A = 62500;        // Timer Compare1A Register
   TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
-
-  Serial.begin(9600);
 
   data.motor = motor;
   data.sensor = sensor;

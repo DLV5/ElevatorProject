@@ -2,7 +2,6 @@
 #include "MotorController.h"
 #include "UltraSonicSensor.h"
 #include "Elevator.h"
-#include "Streaming.h"
 #include <EEPROM.h>
 
 void Elevator::updateNumbersOnDisplay(LiquidCrystal_I2C lcd){
@@ -18,9 +17,6 @@ void Elevator::moveToTheFloor(){
     data.sensor.getPulses(), 
     data.targetFloors[0], 
     data.currentFloor);
-
-
-  Serial << "Going to the floor: " << data.targetFloors[0] << " from the floor " << data.currentFloor << endl;
   
   data.motor.toggleMotor();
   if(data.currentFloor > data.targetFloors[0] && (data.motor.getDirection() == UP)){
@@ -44,9 +40,6 @@ void Elevator::stop(){
 }
 
 bool Elevator::pulsesToFloor(uint16_t pulses){
-
-  //Serial << data.currentFloor << " " << data.targetFloors[0] << " " << pulses << endl;
-
   switch(data.currentFloor){
     case 1:
       if(data.targetFloors[0] == 2){
@@ -90,11 +83,9 @@ void Elevator::setTargetFloor(int floorNumber){
 
   if(!isUniqueFloor) return;
 
-  Serial << "Succesfully added number: " << floorNumber << " to the list" << endl;
   data.targetFloors[data.targetFloorsIndexes] = floorNumber;
   ++data.targetFloorsIndexes;
 
-  //Serial << "Is moving currently " << data.isMoving << endl;
   if(!data.isMoving){
     data.music.stopAndReset();
     moveToTheFloor();
@@ -107,7 +98,6 @@ void Elevator::checkIfTheFloorReached(){
   if(data.isMoving && pulsesToFloor(pulses)){
     stop();
     data.currentFloor = data.targetFloors[0];
-    Serial << "Current floor is: " << data.currentFloor << endl;
     EEPROM.write(0, data.currentFloor);
 
     --data.targetFloorsIndexes;
@@ -117,10 +107,5 @@ void Elevator::checkIfTheFloorReached(){
     data.targetFloors[2] = 0;
 
     data.music.playSong();
-
-    // if(data.targetFloors[0] != 0)
-    //   moveToTheFloor();
-    //Serial << data.targetFloorsIndexes << " Floor index" << endl;
-    //Serial << data.currentFloor << " current floor" << endl;
   }
 }

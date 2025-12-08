@@ -3,7 +3,7 @@
 #include "InputHandler.h"
 
 InputHandler::InputHandler(){
-  //when we subttract 14, we will get corresponding port number A0-A7
+  //when we subttract A0, we will get corresponding port number A0-A7
   DDRC &= ((0 << (_elevatorFloorButtonPins[0] - A0)) 
   |  (0 << (_elevatorFloorButtonPins[1] - A0)) 
   |  (0 << (_elevatorFloorButtonPins[2] - A0)));
@@ -11,10 +11,6 @@ InputHandler::InputHandler(){
   PORTC |= (1 << (_elevatorFloorButtonPins[0] - A0)) 
   |  (1 << (_elevatorFloorButtonPins[1] - A0)) 
   |  (1 << (_elevatorFloorButtonPins[2] - A0));
-
-  // pinMode(_elevatorFloorButtonPins[0], INPUT_PULLUP);
-  // pinMode(_elevatorFloorButtonPins[1], INPUT_PULLUP);
-  // pinMode(_elevatorFloorButtonPins[2], INPUT_PULLUP);
 }
 
 uint8_t* InputHandler::getPins(){

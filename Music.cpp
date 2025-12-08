@@ -1,12 +1,11 @@
 #include "HardwareSerial.h"
 #include "Arduino.h"
 #include "Music.h"
-#include "Streaming.h"
 
 #define BUZZER_PIN 8
 
 Music::Music(){
-    pinMode(BUZZER_PIN, OUTPUT);
+    DDRB |= 1 << BUZZER_PIN - 8;
 }
 
 void Music::playSong(){
